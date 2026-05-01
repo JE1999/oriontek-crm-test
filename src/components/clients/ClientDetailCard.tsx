@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useForm, useFieldArray } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { useFieldArray, useAppForm } from '@/hooks/useAppForm'
 import { toast } from 'sonner'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
@@ -27,23 +24,14 @@ import {
   Pencil,
   X,
   Loader2,
-  Plus,
-  Trash2,
-} from 'lucide-react'
-
-// ─── Schema ───────────────────────────────────────────────────────────────────
-const editSchema = z.object({
-  firstName: z.string().min(2, 'Mínimo 2 caracteres'),
-  lastName: z.string().min(2, 'Mínimo 2 caracteres'),
-  email: z.string().email('Email no válido'),
-  phone: z.string().min(7, 'Mínimo 7 dígitos'),
-  addresses: z
-    .array(z.object({ value: z.string().min(5, 'Mínimo 5 caracteres') }))
-    .min(1, 'Agrega al menos una dirección'),
-  status: z.enum(['active', 'inactive']),
-})
-
-type EditFormValues = z.infer<typeof editSchema>
+} from '@/lib/icons'
+import { StatusBadge } from './StatusBadge'
+import { ClientAvatar } from './ClientAvatar'
+import { StatusSelector } from './StatusSelector'
+import { AddressFormList } from './AddressFormList'
+import { APP_ROUTES } from '@/constants'
+import { clientSchema, type ClientFormValues } from '@/schemas/client.schema'
+import { formatDate } from '@/utils/format'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 function DetailRow({
@@ -96,24 +84,6 @@ function AddressesRow({ addresses }: { addresses: string[] }) {
   )
 }
 
-function StatusBadge({ status }: { status: Client['status'] }) {
-  return (
-    <Badge
-      variant={status === 'active' ? 'default' : 'secondary'}
-      className={
-        status === 'active'
-          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-          : 'bg-slate-100 text-slate-500 border-slate-200'
-      }
-    >
-      <span
-        className={`mr-1.5 h-1.5 w-1.5 rounded-full inline-block ${status === 'active' ? 'bg-emerald-500' : 'bg-slate-400'
-          }`}
-      />
-      {status === 'active' ? 'Activo' : 'Inactivo'}
-    </Badge>
-  )
-}
 
 // ─── Main component ───────────────────────────────────────────────────────────
 interface ClientDetailCardProps {
@@ -125,14 +95,10 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
   const [isEditing, setIsEditing] = useState(false)
   const { mutateAsync, isPending } = useUpdateClient(client.id)
 
-  const formattedDate = new Intl.DateTimeFormat('es-DO', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(client.createdAt))
+  const formattedDate = formatDate(client.createdAt)
 
-  const form = useForm<EditFormValues>({
-    resolver: zodResolver(editSchema),
+  const form = useAppForm<ClientFormValues>({
+    schema: clientSchema,
     values: {
       firstName: client.firstName,
       lastName: client.lastName,
@@ -154,7 +120,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
   }
 
   async function handleSave() {
-    await form.handleSubmit(async (values: EditFormValues) => {
+    await form.handleSubmit(async (values: ClientFormValues) => {
       try {
         await mutateAsync({
           ...values,
@@ -179,9 +145,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
         <div className="flex items-start justify-between gap-4">
           {/* Avatar + name */}
           <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary text-xl font-semibold">
-              {client.firstName[0]}{client.lastName[0]}
-            </div>
+            <ClientAvatar firstName={client.firstName} lastName={client.lastName} size="lg" shape="square" />
 
             {isEditing ? (
               <Form {...form}>
@@ -218,27 +182,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <div className="flex gap-2">
-                            {(['active', 'inactive'] as const).map((s) => (
-                              <label
-                                key={s}
-                                className={`flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${field.value === s
-                                  ? 'border-primary bg-primary/5 text-primary'
-                                  : 'border-border bg-white text-muted-foreground hover:bg-slate-50'
-                                  }`}
-                              >
-                                <input
-                                  type="radio"
-                                  className="sr-only"
-                                  value={s}
-                                  checked={field.value === s}
-                                  onChange={() => field.onChange(s)}
-                                />
-                                <span className={`h-1.5 w-1.5 rounded-full ${s === 'active' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
-                                {s === 'active' ? 'Activo' : 'Inactivo'}
-                              </label>
-                            ))}
-                          </div>
+                          <StatusSelector value={field.value} onChange={field.onChange} size="sm" />
                         </FormControl>
                       </FormItem>
                     )}
@@ -294,7 +238,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate(APP_ROUTES.HOME)}
                   className="text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="mr-1.5 h-4 w-4" />
@@ -369,59 +313,14 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
               <Separator />
 
               {/* Dynamic addresses */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-foreground">Direcciones</p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 h-8 text-xs"
-                    onClick={() => append({ value: '' })}
-                    id="add-address-edit-btn"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                    Agregar
-                  </Button>
-                </div>
-                <div className="space-y-2">
-                  {fields.map((fieldItem, index) => (
-                    <FormField
-                      key={fieldItem.id}
-                      control={form.control}
-                      name={`addresses.${index}.value`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <div className="flex items-center gap-2">
-                              <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-medium text-slate-500">
-                                {index + 1}
-                              </span>
-                              <Input
-                                placeholder={`Dirección ${index + 1}`}
-                                {...field}
-                                id={`edit-address-${index}`}
-                              />
-                              {fields.length > 1 && (
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  className="h-9 w-9 p-0 text-muted-foreground hover:text-destructive hover:bg-red-50 flex-shrink-0"
-                                  onClick={() => remove(index)}
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              )}
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
+              <AddressFormList
+                control={form.control}
+                fields={fields}
+                append={append}
+                remove={remove}
+                addButtonId="add-address-edit-btn"
+                addButtonLabel="Agregar"
+              />
             </div>
           </Form>
         ) : (

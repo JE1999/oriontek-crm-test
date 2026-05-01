@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Users, LayoutDashboard, Building2 } from 'lucide-react'
+import { Users, LayoutDashboard, Building2 } from '@/lib/icons'
 import { cn } from '@/utils/cn'
 
 const navItems = [

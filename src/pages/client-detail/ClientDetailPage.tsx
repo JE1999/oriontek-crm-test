@@ -9,8 +9,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { Loader2, AlertCircle } from 'lucide-react'
+import { Loader2, AlertCircle } from '@/lib/icons'
 import { Button } from '@/components/ui/button'
+import { APP_ROUTES } from '@/constants'
 
 export default function ClientDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -37,7 +38,7 @@ export default function ClientDetailPage() {
             El cliente que buscas no existe o fue eliminado.
           </p>
         </div>
-        <Button variant="outline" onClick={() => navigate('/')}>
+        <Button variant="outline" onClick={() => navigate(APP_ROUTES.HOME)}>
           Volver al listado
         </Button>
       </div>
@@ -51,7 +52,7 @@ export default function ClientDetailPage() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink
-              onClick={() => navigate('/')}
+              onClick={() => navigate(APP_ROUTES.HOME)}
               className="cursor-pointer hover:text-foreground"
             >
               Clientes

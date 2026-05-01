@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createClient } from '@/services/clientsService'
-import { CLIENTS_QUERY_KEY } from '@/hooks/useClients'
+import { QUERY_KEYS } from '@/constants'
 import type { CreateClientPayload } from '@/store/types/client'
 
 export function useCreateClient() {
@@ -9,7 +9,7 @@ export function useCreateClient() {
   return useMutation({
     mutationFn: (payload: CreateClientPayload) => createClient(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: CLIENTS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS })
     },
   })
 }

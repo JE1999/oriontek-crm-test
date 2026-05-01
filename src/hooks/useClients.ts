@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { fetchClients } from '@/services/clientsService'
-
-export const CLIENTS_QUERY_KEY = ['clients'] as const
+import { QUERY_KEYS } from '@/constants'
 
 export function useClients() {
   return useQuery({
-    queryKey: CLIENTS_QUERY_KEY,
+    queryKey: QUERY_KEYS.CLIENTS,
     queryFn: fetchClients,
   })
 }

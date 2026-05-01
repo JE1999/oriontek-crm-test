@@ -1,6 +1,4 @@
-import { useForm, useFieldArray } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { useFieldArray, useAppForm } from '@/hooks/useAppForm'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import {
@@ -14,34 +12,25 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useCreateClient } from '@/hooks/useCreateClient'
-import { Loader2, Plus, Trash2 } from 'lucide-react'
-
-const clientSchema = z.object({
-  firstName: z.string().min(2, 'Mínimo 2 caracteres'),
-  lastName: z.string().min(2, 'Mínimo 2 caracteres'),
-  email: z.string().email('Email no válido'),
-  phone: z.string().min(7, 'Mínimo 7 dígitos'),
-  addresses: z
-    .array(z.object({ value: z.string().min(5, 'Mínimo 5 caracteres') }))
-    .min(1, 'Agrega al menos una dirección'),
-  status: z.enum(['active', 'inactive']),
-})
-
-type ClientFormValues = z.infer<typeof clientSchema>
+import { Loader2 } from '@/lib/icons'
+import { AddressFormList } from './AddressFormList'
+import { StatusSelector } from './StatusSelector'
+import { CLIENT_STATUS, APP_ROUTES } from '@/constants'
+import { clientSchema, type ClientFormValues } from '@/schemas/client.schema'
 
 export function ClientForm() {
   const navigate = useNavigate()
   const { mutateAsync, isPending } = useCreateClient()
 
-  const form = useForm<ClientFormValues>({
-    resolver: zodResolver(clientSchema),
+  const form = useAppForm<ClientFormValues>({
+    schema: clientSchema,
     defaultValues: {
       firstName: '',
       lastName: '',
       email: '',
       phone: '',
       addresses: [{ value: '' }],
-      status: 'active',
+      status: CLIENT_STATUS.ACTIVE,
     },
   })
 
@@ -59,7 +48,7 @@ export function ClientForm() {
       toast.success('Cliente creado', {
         description: `${values.firstName} ${values.lastName} fue registrado exitosamente.`,
       })
-      navigate('/')
+      navigate(APP_ROUTES.HOME)
     } catch {
       toast.error('Error al crear cliente', {
         description: 'Ocurrió un problema. Intenta de nuevo.',
@@ -140,66 +129,14 @@ export function ClientForm() {
             <p className="text-xs text-muted-foreground mt-0.5">Ubicación y estado del cliente</p>
           </div>
           {/* Addresses */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-foreground">Direcciones</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Puedes agregar múltiples direcciones para este cliente
-                </p>
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="gap-1.5 h-8 text-xs"
-                onClick={() => append({ value: '' })}
-                id="add-address-btn"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                Agregar dirección
-              </Button>
-            </div>
-
-            <div className="space-y-2">
-              {fields.map((field, index) => (
-                <FormField
-                  key={field.id}
-                  control={form.control}
-                  name={`addresses.${index}.value`}
-                  render={({ field: inputField }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-medium text-slate-500">
-                            {index + 1}
-                          </div>
-                          <Input
-                            placeholder={`Dirección ${index + 1}`}
-                            {...inputField}
-                            id={`address-input-${index}`}
-                          />
-                          {fields.length > 1 && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="h-9 w-9 p-0 text-muted-foreground hover:text-destructive hover:bg-red-50 flex-shrink-0"
-                              onClick={() => remove(index)}
-                              id={`remove-address-${index}`}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          )}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
-          </div>
+          <AddressFormList
+            control={form.control}
+            fields={fields}
+            append={append}
+            remove={remove}
+            subtitle="Puedes agregar múltiples direcciones para este cliente"
+            addButtonId="add-address-btn"
+          />
 
           {/* Status */}
           <FormField
@@ -209,29 +146,7 @@ export function ClientForm() {
               <FormItem>
                 <FormLabel>Estado</FormLabel>
                 <FormControl>
-                  <div className="flex gap-3">
-                    {(['active', 'inactive'] as const).map((s) => (
-                      <label
-                        key={s}
-                        className={`flex cursor-pointer items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${field.value === s
-                            ? 'border-primary bg-primary/5 text-primary'
-                            : 'border-border bg-white text-muted-foreground hover:bg-slate-50'
-                          }`}
-                      >
-                        <input
-                          type="radio"
-                          className="sr-only"
-                          value={s}
-                          checked={field.value === s}
-                          onChange={() => field.onChange(s)}
-                        />
-                        <span
-                          className={`h-2 w-2 rounded-full ${s === 'active' ? 'bg-emerald-500' : 'bg-slate-400'}`}
-                        />
-                        {s === 'active' ? 'Activo' : 'Inactivo'}
-                      </label>
-                    ))}
-                  </div>
+                  <StatusSelector value={field.value} onChange={field.onChange} size="md" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -244,7 +159,7 @@ export function ClientForm() {
           <Button
             type="button"
             variant="ghost"
-            onClick={() => navigate('/')}
+            onClick={() => navigate(APP_ROUTES.HOME)}
             disabled={isPending}
           >
             Cancelar

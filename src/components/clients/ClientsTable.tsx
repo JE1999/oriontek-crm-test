@@ -7,48 +7,35 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { ClientAvatar } from './ClientAvatar'
 import type { Client } from '@/store/types/client'
-import { ChevronRight, Users } from 'lucide-react'
+import { ChevronRight, Users } from '@/lib/icons'
+import { APP_ROUTES, PAGE_SIZE_OPTIONS } from '@/constants'
+import { StatusBadge } from './StatusBadge'
+import { TableSkeletonRow } from '@/components/ui/table-skeleton'
 
 interface ClientsTableProps {
   clients: Client[]
   isLoading?: boolean
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
+  totalItems: number
+  pageSize: number
+  onPageSizeChange: (size: number) => void
 }
 
-function StatusBadge({ status }: { status: Client['status'] }) {
-  return (
-    <Badge
-      variant={status === 'active' ? 'default' : 'secondary'}
-      className={
-        status === 'active'
-          ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-50'
-          : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-100'
-      }
-    >
-      <span
-        className={`mr-1.5 h-1.5 w-1.5 rounded-full inline-block ${status === 'active' ? 'bg-emerald-500' : 'bg-slate-400'
-          }`}
-      />
-      {status === 'active' ? 'Activo' : 'Inactivo'}
-    </Badge>
-  )
-}
-
-function SkeletonRow() {
-  return (
-    <TableRow>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <TableCell key={i}>
-          <div className="h-4 rounded bg-slate-100 animate-pulse" style={{ width: `${60 + Math.random() * 30}%` }} />
-        </TableCell>
-      ))}
-    </TableRow>
-  )
-}
-
-export function ClientsTable({ clients, isLoading }: ClientsTableProps) {
+export function ClientsTable({
+  clients,
+  isLoading,
+  currentPage,
+  totalPages,
+  onPageChange,
+  totalItems,
+  pageSize,
+  onPageSizeChange,
+}: ClientsTableProps) {
   const navigate = useNavigate()
 
   return (
@@ -65,7 +52,7 @@ export function ClientsTable({ clients, isLoading }: ClientsTableProps) {
         </TableHeader>
         <TableBody>
           {isLoading ? (
-            Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)
+            Array.from({ length: 10 }).map((_, i) => <TableSkeletonRow key={i} columns={5} />)
           ) : clients.length === 0 ? (
             <TableRow>
               <TableCell colSpan={5} className="py-20 text-center">
@@ -81,13 +68,11 @@ export function ClientsTable({ clients, isLoading }: ClientsTableProps) {
               <TableRow
                 key={client.id}
                 className="cursor-pointer hover:bg-slate-50 transition-colors group"
-                onClick={() => navigate(`/clients/${client.id}`)}
+                onClick={() => navigate(APP_ROUTES.CLIENT_DETAIL(client.id))}
               >
                 <TableCell className="pl-5 font-medium text-foreground">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-semibold">
-                      {client.firstName[0]}{client.lastName[0]}
-                    </div>
+                    <ClientAvatar firstName={client.firstName} lastName={client.lastName} size="sm" shape="circle" />
                     {client.firstName} {client.lastName}
                   </div>
                 </TableCell>
@@ -110,6 +95,54 @@ export function ClientsTable({ clients, isLoading }: ClientsTableProps) {
           )}
         </TableBody>
       </Table>
+      {!isLoading && clients.length > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-3 border-t border-border bg-slate-50/50">
+          <div className="flex items-center gap-3 text-sm text-muted-foreground w-full sm:w-auto justify-between sm:justify-start">
+            <p>
+              Total: <span className="font-medium text-foreground">{totalItems}</span>
+            </p>
+            <div className="h-4 w-px bg-border hidden sm:block" />
+            <div className="flex items-center gap-2">
+              <span>Mostrar:</span>
+              <select
+                className="rounded-md border border-input bg-white px-2 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                value={pageSize}
+                onChange={(e) => onPageSizeChange(Number(e.target.value))}
+              >
+                {PAGE_SIZE_OPTIONS.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
+            <p className="text-sm text-muted-foreground">
+              Página <span className="font-medium text-foreground">{currentPage}</span> de <span className="font-medium text-foreground">{totalPages}</span>
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onPageChange(currentPage - 1)}
+                disabled={currentPage <= 1 || isLoading}
+              >
+                Anterior
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onPageChange(currentPage + 1)}
+                disabled={currentPage >= totalPages || isLoading}
+              >
+                Siguiente
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

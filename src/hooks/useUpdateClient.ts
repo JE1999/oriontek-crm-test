@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateClient, type UpdateClientPayload } from '@/services/clientsService'
-import { CLIENTS_QUERY_KEY } from '@/hooks/useClients'
+import { QUERY_KEYS } from '@/constants'
 
 export function useUpdateClient(id: string) {
   const queryClient = useQueryClient()
@@ -9,9 +9,9 @@ export function useUpdateClient(id: string) {
     mutationFn: (payload: UpdateClientPayload) => updateClient(id, payload),
     onSuccess: (updated) => {
       // Update the individual client cache
-      queryClient.setQueryData(['clients', id], updated)
+      queryClient.setQueryData(QUERY_KEYS.CLIENT(id), updated)
       // Invalidate the full list so it refreshes too
-      queryClient.invalidateQueries({ queryKey: CLIENTS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS })
     },
   })
 }

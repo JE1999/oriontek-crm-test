@@ -1,24 +1,21 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useClients } from '@/hooks/useClients'
+import { useTableParams } from '@/hooks/useTableParams'
+import { APP_ROUTES } from '@/constants'
 import { ClientsTable } from '@/components/clients/ClientsTable'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, Search, Users } from 'lucide-react'
+import { Plus, Search, Users } from '@/lib/icons'
+import { filterClients } from '@/utils/clients'
+import { paginate } from '@/utils/pagination'
 
 export default function HomePage() {
   const navigate = useNavigate()
   const { data: clients = [], isLoading } = useClients()
-  const [search, setSearch] = useState('')
+  const { q, page, pageSize, handleSearch, handlePageChange, handlePageSizeChange } = useTableParams()
 
-  const filtered = clients.filter((c) => {
-    const q = search.toLowerCase()
-    return (
-      c.firstName.toLowerCase().includes(q) ||
-      c.lastName.toLowerCase().includes(q) ||
-      c.email.toLowerCase().includes(q)
-    )
-  })
+  const filtered = filterClients(clients, q)
+  const { data: paginatedClients, totalItems, totalPages } = paginate(filtered, page, pageSize)
 
   return (
     <div className="space-y-6">
@@ -30,7 +27,7 @@ export default function HomePage() {
             {isLoading ? 'Cargando…' : `${clients.length} clientes registrados`}
           </p>
         </div>
-        <Button onClick={() => navigate('/clients')} className="gap-2 self-start sm:self-auto">
+        <Button onClick={() => navigate(APP_ROUTES.CREATE_CLIENT)} className="gap-2 self-start sm:self-auto">
           <Plus className="h-4 w-4" />
           Nuevo cliente
         </Button>
@@ -41,8 +38,8 @@ export default function HomePage() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
           placeholder="Buscar por nombre o email…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={q}
+          onChange={(e) => handleSearch(e.target.value)}
           className="pl-9 bg-white max-w-sm"
           id="search-clients"
         />
@@ -76,14 +73,23 @@ export default function HomePage() {
       )}
 
       {/* Table */}
-      {search && filtered.length === 0 && !isLoading ? (
+      {q && filtered.length === 0 && !isLoading ? (
         <div className="rounded-sm border border-border bg-white py-20 text-center">
           <Users className="mx-auto h-10 w-10 text-slate-300" />
-          <p className="mt-3 font-medium text-slate-500">Sin resultados para "{search}"</p>
+          <p className="mt-3 font-medium text-slate-500">Sin resultados para "{q}"</p>
           <p className="text-sm text-muted-foreground mt-1">Intenta con otro nombre o email.</p>
         </div>
       ) : (
-        <ClientsTable clients={filtered} isLoading={isLoading} />
+        <ClientsTable
+          clients={paginatedClients}
+          isLoading={isLoading}
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          totalItems={totalItems}
+          pageSize={pageSize}
+          onPageSizeChange={handlePageSizeChange}
+        />
       )}
     </div>
   )

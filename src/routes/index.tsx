@@ -3,21 +3,22 @@ import { AppLayout } from '@/layouts/AppLayout'
 import HomePage from '@/pages/home/HomePage'
 import CreateClientPage from '@/pages/clients/CreateClientPage'
 import ClientDetailPage from '@/pages/client-detail/ClientDetailPage'
+import { APP_ROUTES } from '@/constants'
 
 export const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
       {
-        path: '/',
+        path: APP_ROUTES.HOME,
         element: <HomePage />,
       },
       {
-        path: '/clients',
+        path: APP_ROUTES.CREATE_CLIENT,
         element: <CreateClientPage />,
       },
       {
-        path: '/clients/:id',
+        path: APP_ROUTES.CLIENT_DETAIL_ROUTE,
         element: <ClientDetailPage />,
       },
     ],

@@ -9,7 +9,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from '@/lib/icons'
+import { APP_ROUTES } from '@/constants'
 
 export default function CreateClientPage() {
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ export default function CreateClientPage() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink
-              onClick={() => navigate('/')}
+              onClick={() => navigate(APP_ROUTES.HOME)}
               className="cursor-pointer hover:text-foreground"
             >
               Clientes
@@ -39,7 +40,7 @@ export default function CreateClientPage() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate('/')}
+          onClick={() => navigate(APP_ROUTES.HOME)}
           className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
           id="back-button"
         >
