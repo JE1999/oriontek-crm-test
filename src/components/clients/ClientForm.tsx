@@ -11,16 +11,23 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useCreateClient } from '@/hooks/useCreateClient'
+import { useDataMutation, useDataClient } from '@/hooks/useData'
+import { createClient } from '@/services/clientsService'
 import { Loader2 } from '@/lib/icons'
 import { AddressFormList } from './AddressFormList'
 import { StatusSelector } from './StatusSelector'
-import { CLIENT_STATUS, APP_ROUTES } from '@/constants'
+import { CLIENT_STATUS, APP_ROUTES, QUERY_KEYS } from '@/constants'
 import { clientSchema, type ClientFormValues } from '@/schemas/client.schema'
 
 export function ClientForm() {
   const navigate = useNavigate()
-  const { mutateAsync, isPending } = useCreateClient()
+  const queryClient = useDataClient()
+  const { mutateAsync, isPending } = useDataMutation({
+    mutationFn: createClient,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS })
+    },
+  })
 
   const form = useAppForm<ClientFormValues>({
     schema: clientSchema,

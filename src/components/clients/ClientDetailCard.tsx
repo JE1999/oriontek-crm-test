@@ -13,7 +13,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { useUpdateClient } from '@/hooks/useUpdateClient'
+import { useDataMutation, useDataClient } from '@/hooks/useData'
+import { updateClient, type UpdateClientPayload } from '@/services/clientsService'
+import { QUERY_KEYS } from '@/constants'
 import type { Client } from '@/store/types/client'
 import {
   Mail,
@@ -93,7 +95,14 @@ interface ClientDetailCardProps {
 export function ClientDetailCard({ client }: ClientDetailCardProps) {
   const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
-  const { mutateAsync, isPending } = useUpdateClient(client.id)
+  const queryClient = useDataClient()
+  const { mutateAsync, isPending } = useDataMutation({
+    mutationFn: (payload: UpdateClientPayload) => updateClient(client.id, payload),
+    onSuccess: (updated) => {
+      queryClient.setQueryData(QUERY_KEYS.CLIENT(client.id), updated)
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS })
+    },
+  })
 
   const formattedDate = formatDate(client.createdAt)
 

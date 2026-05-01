@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useClient } from '@/hooks/useClient'
+import { useDataQuery } from '@/hooks/useData'
+import { fetchClientById } from '@/services/clientsService'
+import { QUERY_KEYS } from '@/constants'
 import { ClientDetailCard } from '@/components/clients/ClientDetailCard'
 import {
   Breadcrumb,
@@ -16,7 +18,11 @@ import { APP_ROUTES } from '@/constants'
 export default function ClientDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { data: client, isLoading, isError } = useClient(id ?? '')
+  const { data: client, isLoading, isError } = useDataQuery({
+    queryKey: QUERY_KEYS.CLIENT(id ?? ''),
+    queryFn: () => fetchClientById(id ?? ''),
+    enabled: !!id,
+  })
 
   if (isLoading) {
     return (

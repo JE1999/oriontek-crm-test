@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { useClients } from '@/hooks/useClients'
+import { useDataQuery } from '@/hooks/useData'
+import { fetchClients } from '@/services/clientsService'
+import { QUERY_KEYS } from '@/constants'
 import { useTableParams } from '@/hooks/useTableParams'
 import { APP_ROUTES } from '@/constants'
 import { ClientsTable } from '@/components/clients/ClientsTable'
@@ -11,7 +13,10 @@ import { paginate } from '@/utils/pagination'
 
 export default function HomePage() {
   const navigate = useNavigate()
-  const { data: clients = [], isLoading } = useClients()
+  const { data: clients = [], isLoading } = useDataQuery({
+    queryKey: QUERY_KEYS.CLIENTS,
+    queryFn: fetchClients,
+  })
   const { q, page, pageSize, handleSearch, handlePageChange, handlePageSizeChange } = useTableParams()
 
   const filtered = filterClients(clients, q)
