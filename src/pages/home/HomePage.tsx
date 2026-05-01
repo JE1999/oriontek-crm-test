@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClientsTable } from "@/components/clients/ClientsTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { APP_ROUTES, QUERY_KEYS } from "@/constants";
 import { useDataQuery } from "@/hooks/useData";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useT } from "@/hooks/useT";
 import { useTableParams } from "@/hooks/useTableParams";
 import { Plus, Search, Users } from "@/lib/icons";
@@ -26,6 +28,19 @@ export default function HomePage() {
     handlePageChange,
     handlePageSizeChange,
   } = useTableParams();
+
+  const [searchValue, setSearchValue] = useState(q);
+  const debouncedSearchValue = useDebounce(searchValue);
+
+  useEffect(() => {
+    if (debouncedSearchValue !== q) {
+      handleSearch(debouncedSearchValue);
+    }
+  }, [debouncedSearchValue, q, handleSearch]);
+
+  useEffect(() => {
+    setSearchValue(q);
+  }, [q]);
 
   const filtered = filterClients(clients, q);
   const {
@@ -62,8 +77,8 @@ export default function HomePage() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
           placeholder={t("home.searchPlaceholder")}
-          value={q}
-          onChange={(e) => handleSearch(e.target.value)}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
           className="pl-9 bg-white max-w-sm"
           id="search-clients"
         />
