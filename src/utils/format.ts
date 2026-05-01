@@ -4,8 +4,12 @@
  */
 export function formatDate(
   date: string | Date,
-  locale = 'es-DO',
-  options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+  locale = "es-DO",
+  options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  },
 ): string {
-  return new Intl.DateTimeFormat(locale, options).format(new Date(date))
+  return new Intl.DateTimeFormat(locale, options).format(new Date(date));
 }

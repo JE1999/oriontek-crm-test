@@ -1,14 +1,18 @@
-import { CLIENT_STATUS } from '@/constants'
-import { useT } from '@/hooks/useT'
+import { CLIENT_STATUS } from "@/constants";
+import { useT } from "@/hooks/useT";
 
 interface StatusSelectorProps {
-  value: 'active' | 'inactive'
-  onChange: (value: 'active' | 'inactive') => void
-  size?: 'sm' | 'md'
+  value: "active" | "inactive";
+  onChange: (value: "active" | "inactive") => void;
+  size?: "sm" | "md";
 }
 
-export function StatusSelector({ value, onChange, size = 'md' }: StatusSelectorProps) {
-  const { t } = useT()
+export function StatusSelector({
+  value,
+  onChange,
+  size = "md",
+}: StatusSelectorProps) {
+  const { t } = useT();
 
   return (
     <div className="flex gap-2">
@@ -16,11 +20,13 @@ export function StatusSelector({ value, onChange, size = 'md' }: StatusSelectorP
         <label
           key={s}
           className={`flex cursor-pointer items-center transition-colors border ${
-            size === 'md' ? 'gap-2 rounded-lg px-4 py-2.5 text-sm' : 'gap-1.5 rounded-lg px-3 py-1.5 text-xs'
+            size === "md"
+              ? "gap-2 rounded-lg px-4 py-2.5 text-sm"
+              : "gap-1.5 rounded-lg px-3 py-1.5 text-xs"
           } font-medium ${
             value === s
-              ? 'border-primary bg-primary/5 text-primary'
-              : 'border-border bg-white text-muted-foreground hover:bg-slate-50'
+              ? "border-primary bg-primary/5 text-primary"
+              : "border-border bg-white text-muted-foreground hover:bg-slate-50"
           }`}
         >
           <input
@@ -32,12 +38,14 @@ export function StatusSelector({ value, onChange, size = 'md' }: StatusSelectorP
           />
           <span
             className={`rounded-full ${
-              size === 'md' ? 'h-2 w-2' : 'h-1.5 w-1.5'
-            } ${s === CLIENT_STATUS.ACTIVE ? 'bg-emerald-500' : 'bg-slate-400'}`}
+              size === "md" ? "h-2 w-2" : "h-1.5 w-1.5"
+            } ${s === CLIENT_STATUS.ACTIVE ? "bg-emerald-500" : "bg-slate-400"}`}
           />
-          {s === CLIENT_STATUS.ACTIVE ? t('status.active') : t('status.inactive')}
+          {s === CLIENT_STATUS.ACTIVE
+            ? t("status.active")
+            : t("status.inactive")}
         </label>
       ))}
     </div>
-  )
+  );
 }

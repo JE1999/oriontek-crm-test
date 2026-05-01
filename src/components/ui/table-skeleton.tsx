@@ -1,7 +1,7 @@
-import { TableCell, TableRow } from '@/components/ui/table'
+import { TableCell, TableRow } from "@/components/ui/table";
 
 interface TableSkeletonRowProps {
-  columns?: number
+  columns?: number;
 }
 
 export function TableSkeletonRow({ columns = 5 }: TableSkeletonRowProps) {
@@ -9,9 +9,12 @@ export function TableSkeletonRow({ columns = 5 }: TableSkeletonRowProps) {
     <TableRow>
       {Array.from({ length: columns }).map((_, i) => (
         <TableCell key={i}>
-          <div className="h-8 rounded bg-slate-100 animate-pulse" style={{ width: `${60 + Math.random() * 30}%` }} />
+          <div
+            className="h-8 rounded bg-slate-100 animate-pulse"
+            style={{ width: `${60 + Math.random() * 30}%` }}
+          />
         </TableCell>
       ))}
     </TableRow>
-  )
+  );
 }

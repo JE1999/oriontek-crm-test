@@ -1,9 +1,5 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { useT } from '@/hooks/useT'
-import { useDataQuery } from '@/hooks/useData'
-import { fetchClientById } from '@/services/clientsService'
-import { QUERY_KEYS } from '@/constants'
-import { ClientDetailCard } from '@/components/clients/ClientDetailCard'
+import { useNavigate, useParams } from "react-router-dom";
+import { ClientDetailCard } from "@/components/clients/ClientDetailCard";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,27 +7,34 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import { Loader2, AlertCircle } from '@/lib/icons'
-import { Button } from '@/components/ui/button'
-import { APP_ROUTES } from '@/constants'
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { APP_ROUTES, QUERY_KEYS } from "@/constants";
+import { useDataQuery } from "@/hooks/useData";
+import { useT } from "@/hooks/useT";
+import { AlertCircle, Loader2 } from "@/lib/icons";
+import { fetchClientById } from "@/services/clientsService";
 
 export default function ClientDetailPage() {
-  const { t } = useT()
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
-  const { data: client, isLoading, isError } = useDataQuery({
-    queryKey: QUERY_KEYS.CLIENT(id ?? ''),
-    queryFn: () => fetchClientById(id ?? ''),
+  const { t } = useT();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const {
+    data: client,
+    isLoading,
+    isError,
+  } = useDataQuery({
+    queryKey: QUERY_KEYS.CLIENT(id ?? ""),
+    queryFn: () => fetchClientById(id ?? ""),
     enabled: !!id,
-  })
+  });
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-32">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
-    )
+    );
   }
 
   if (isError || !client) {
@@ -41,16 +44,18 @@ export default function ClientDetailPage() {
           <AlertCircle className="h-7 w-7 text-red-500" />
         </div>
         <div>
-          <p className="font-semibold text-foreground">{t('clientDetail.notFound.title')}</p>
+          <p className="font-semibold text-foreground">
+            {t("clientDetail.notFound.title")}
+          </p>
           <p className="text-sm text-muted-foreground mt-1">
-            {t('clientDetail.notFound.desc')}
+            {t("clientDetail.notFound.desc")}
           </p>
         </div>
         <Button variant="outline" onClick={() => navigate(APP_ROUTES.HOME)}>
-          {t('clientDetail.notFound.back')}
+          {t("clientDetail.notFound.back")}
         </Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -63,7 +68,7 @@ export default function ClientDetailPage() {
               onClick={() => navigate(APP_ROUTES.HOME)}
               className="cursor-pointer hover:text-foreground"
             >
-              {t('clientDetail.breadcrumb.clients')}
+              {t("clientDetail.breadcrumb.clients")}
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -78,5 +83,5 @@ export default function ClientDetailPage() {
       {/* Detail */}
       <ClientDetailCard client={client} />
     </div>
-  )
+  );
 }

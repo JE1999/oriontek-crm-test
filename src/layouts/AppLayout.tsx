@@ -1,6 +1,6 @@
-import { Outlet } from 'react-router-dom'
-import { Sidebar } from './Sidebar'
-import { Toaster } from '@/components/ui/sonner'
+import { Outlet } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
+import { Sidebar } from "./Sidebar";
 
 export function AppLayout() {
   return (
@@ -13,5 +13,5 @@ export function AppLayout() {
       </main>
       <Toaster position="bottom-right" />
     </div>
-  )
+  );
 }

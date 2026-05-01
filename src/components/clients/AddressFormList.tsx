@@ -1,42 +1,47 @@
-import { FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Plus, Trash2 } from '@/lib/icons'
-import { useT } from '@/hooks/useT'
-import type { Control } from 'react-hook-form'
+import type { Control } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useT } from "@/hooks/useT";
+import { Plus, Trash2 } from "@/lib/icons";
 
 interface AddressFormListProps {
-  control: Control<any>
-  name?: string
-  fields: Record<'id', string>[]
-  append: (value: any) => void
-  remove: (index: number) => void
-  addButtonId?: string
-  addButtonLabel?: string
-  subtitle?: string
+  control: Control<any>;
+  name?: string;
+  fields: Record<"id", string>[];
+  append: (value: any) => void;
+  remove: (index: number) => void;
+  addButtonId?: string;
+  addButtonLabel?: string;
+  subtitle?: string;
 }
 
 export function AddressFormList({
   control,
-  name = 'addresses',
+  name = "addresses",
   fields,
   append,
   remove,
-  addButtonId = 'add-address-btn',
-  addButtonLabel = 'Agregar dirección',
-  subtitle
+  addButtonId = "add-address-btn",
+  addButtonLabel = "Agregar dirección",
+  subtitle,
 }: AddressFormListProps) {
-  const { t } = useT()
+  const { t } = useT();
 
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-foreground">{t('addressForm.title')}</p>
+          <p className="text-sm font-medium text-foreground">
+            {t("addressForm.title")}
+          </p>
           {subtitle && (
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {subtitle}
-            </p>
+            <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>
           )}
         </div>
         <Button
@@ -44,11 +49,13 @@ export function AddressFormList({
           variant="outline"
           size="sm"
           className="gap-1.5 h-8 text-xs"
-          onClick={() => append({ value: '' })}
+          onClick={() => append({ value: "" })}
           id={addButtonId}
         >
           <Plus className="h-3.5 w-3.5" />
-          {addButtonLabel === 'Agregar dirección' ? t('addressForm.add') : addButtonLabel}
+          {addButtonLabel === "Agregar dirección"
+            ? t("addressForm.add")
+            : addButtonLabel}
         </Button>
       </div>
 
@@ -66,7 +73,9 @@ export function AddressFormList({
                       {index + 1}
                     </div>
                     <Input
-                      placeholder={t('addressForm.addressX', { count: index + 1 })}
+                      placeholder={t("addressForm.addressX", {
+                        count: index + 1,
+                      })}
                       {...field}
                       id={`address-input-${index}`}
                     />
@@ -91,5 +100,5 @@ export function AddressFormList({
         ))}
       </div>
     </div>
-  )
+  );
 }

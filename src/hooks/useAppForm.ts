@@ -1,9 +1,15 @@
-import { useForm, useFieldArray, type UseFormProps, type FieldValues } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import type { ZodType } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  type FieldValues,
+  type UseFormProps,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
+import type { ZodType } from "zod";
 
-interface UseAppFormProps<TFieldValues extends FieldValues> extends Omit<UseFormProps<TFieldValues>, 'resolver'> {
-  schema: ZodType<any, any, any>
+interface UseAppFormProps<TFieldValues extends FieldValues>
+  extends Omit<UseFormProps<TFieldValues>, "resolver"> {
+  schema: ZodType<any, any, any>;
 }
 
 /**
@@ -19,7 +25,7 @@ export function useAppForm<TFieldValues extends FieldValues>({
   return useForm<TFieldValues>({
     ...formConfig,
     resolver: zodResolver(schema),
-  })
+  });
 }
 
-export { useFieldArray }
+export { useFieldArray };

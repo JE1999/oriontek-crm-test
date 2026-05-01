@@ -1,15 +1,15 @@
-import { NavLink } from 'react-router-dom'
-import { useT } from '@/hooks/useT'
-import { Users, LayoutDashboard, Building2 } from '@/lib/icons'
-import { cn } from '@/utils/cn'
+import { NavLink } from "react-router-dom";
+import { useT } from "@/hooks/useT";
+import { Building2, LayoutDashboard, Users } from "@/lib/icons";
+import { cn } from "@/utils/cn";
 
 const navItems = [
-  { to: '/', labelKey: 'sidebar.dashboard', icon: LayoutDashboard, end: true },
-  { to: '/clients', labelKey: 'sidebar.newClient', icon: Users, end: false },
-]
+  { to: "/", labelKey: "sidebar.dashboard", icon: LayoutDashboard, end: true },
+  { to: "/clients", labelKey: "sidebar.newClient", icon: Users, end: false },
+];
 
 export function Sidebar() {
-  const { t } = useT()
+  const { t } = useT();
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-border bg-white">
@@ -19,15 +19,19 @@ export function Sidebar() {
           <Building2 className="h-4 w-4 text-white" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-foreground leading-none">OrionTek</p>
-          <p className="text-xs text-muted-foreground leading-none mt-0.5">CRM</p>
+          <p className="text-sm font-semibold text-foreground leading-none">
+            OrionTek
+          </p>
+          <p className="text-xs text-muted-foreground leading-none mt-0.5">
+            CRM
+          </p>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
         <p className="mb-2 px-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          {t('sidebar.menu')}
+          {t("sidebar.menu")}
         </p>
         <ul className="space-y-0.5">
           {navItems.map(({ to, labelKey, icon: Icon, end }) => (
@@ -37,10 +41,10 @@ export function Sidebar() {
                 end={end}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                     isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-slate-100 hover:text-foreground'
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-slate-100 hover:text-foreground",
                   )
                 }
               >
@@ -57,5 +61,5 @@ export function Sidebar() {
         <p className="text-xs text-muted-foreground">v1.0.0 · OrionTek CRM</p>
       </div>
     </aside>
-  )
+  );
 }

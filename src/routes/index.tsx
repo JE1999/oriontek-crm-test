@@ -1,9 +1,9 @@
-import { createBrowserRouter } from 'react-router-dom'
-import { AppLayout } from '@/layouts/AppLayout'
-import HomePage from '@/pages/home/HomePage'
-import CreateClientPage from '@/pages/clients/CreateClientPage'
-import ClientDetailPage from '@/pages/client-detail/ClientDetailPage'
-import { APP_ROUTES } from '@/constants'
+import { createBrowserRouter } from "react-router-dom";
+import { APP_ROUTES } from "@/constants";
+import { AppLayout } from "@/layouts/AppLayout";
+import ClientDetailPage from "@/pages/client-detail/ClientDetailPage";
+import CreateClientPage from "@/pages/clients/CreateClientPage";
+import HomePage from "@/pages/home/HomePage";
 
 export const router = createBrowserRouter([
   {
@@ -23,4 +23,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]);

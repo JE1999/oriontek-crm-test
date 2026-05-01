@@ -1,11 +1,7 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useFieldArray, useAppForm } from '@/hooks/useAppForm'
-import { useT } from '@/hooks/useT'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,28 +9,37 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { useDataMutation, useDataClient } from '@/hooks/useData'
-import { updateClient, type UpdateClientPayload } from '@/services/clientsService'
-import { QUERY_KEYS } from '@/constants'
-import type { Client } from '@/store/types/client'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { APP_ROUTES, QUERY_KEYS } from "@/constants";
+import { useAppForm, useFieldArray } from "@/hooks/useAppForm";
+import { useDataClient, useDataMutation } from "@/hooks/useData";
+import { useT } from "@/hooks/useT";
 import {
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
   ArrowLeft,
-  Pencil,
-  X,
+  Calendar,
   Loader2,
-} from '@/lib/icons'
-import { StatusBadge } from './StatusBadge'
-import { ClientAvatar } from './ClientAvatar'
-import { StatusSelector } from './StatusSelector'
-import { AddressFormList } from './AddressFormList'
-import { APP_ROUTES } from '@/constants'
-import { getClientSchema, type ClientFormValues } from '@/schemas/client.schema'
-import { formatDate } from '@/utils/format'
+  Mail,
+  MapPin,
+  Pencil,
+  Phone,
+  X,
+} from "@/lib/icons";
+import {
+  type ClientFormValues,
+  getClientSchema,
+} from "@/schemas/client.schema";
+import {
+  type UpdateClientPayload,
+  updateClient,
+} from "@/services/clientsService";
+import type { Client } from "@/store/types/client";
+import { formatDate } from "@/utils/format";
+import { AddressFormList } from "./AddressFormList";
+import { ClientAvatar } from "./ClientAvatar";
+import { StatusBadge } from "./StatusBadge";
+import { StatusSelector } from "./StatusSelector";
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 function DetailRow({
@@ -42,9 +47,9 @@ function DetailRow({
   label,
   value,
 }: {
-  icon: React.ElementType
-  label: string
-  value: string
+  icon: React.ElementType;
+  label: string;
+  value: string;
 }) {
   return (
     <div className="flex items-start gap-3">
@@ -56,10 +61,16 @@ function DetailRow({
         <p className="text-sm text-foreground mt-0.5">{value}</p>
       </div>
     </div>
-  )
+  );
 }
 
-function AddressesRow({ addresses, label }: { addresses: string[], label: string }) {
+function AddressesRow({
+  addresses,
+  label,
+}: {
+  addresses: string[];
+  label: string;
+}) {
   return (
     <div className="flex items-start gap-3">
       <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-slate-100">
@@ -84,29 +95,29 @@ function AddressesRow({ addresses, label }: { addresses: string[], label: string
         </ul>
       </div>
     </div>
-  )
+  );
 }
-
 
 // ─── Main component ───────────────────────────────────────────────────────────
 interface ClientDetailCardProps {
-  client: Client
+  client: Client;
 }
 
 export function ClientDetailCard({ client }: ClientDetailCardProps) {
-  const { t } = useT()
-  const navigate = useNavigate()
-  const [isEditing, setIsEditing] = useState(false)
-  const queryClient = useDataClient()
+  const { t } = useT();
+  const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+  const queryClient = useDataClient();
   const { mutateAsync, isPending } = useDataMutation({
-    mutationFn: (payload: UpdateClientPayload) => updateClient(client.id, payload),
+    mutationFn: (payload: UpdateClientPayload) =>
+      updateClient(client.id, payload),
     onSuccess: (updated) => {
-      queryClient.setQueryData(QUERY_KEYS.CLIENT(client.id), updated)
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS })
+      queryClient.setQueryData(QUERY_KEYS.CLIENT(client.id), updated);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS });
     },
-  })
+  });
 
-  const formattedDate = formatDate(client.createdAt)
+  const formattedDate = formatDate(client.createdAt);
 
   const form = useAppForm<ClientFormValues>({
     schema: getClientSchema(t),
@@ -118,16 +129,16 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
       addresses: client.addresses.map((a) => ({ value: a })),
       status: client.status,
     },
-  })
+  });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'addresses',
-  })
+    name: "addresses",
+  });
 
   function handleCancel() {
-    form.reset()
-    setIsEditing(false)
+    form.reset();
+    setIsEditing(false);
   }
 
   async function handleSave() {
@@ -136,17 +147,17 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
         await mutateAsync({
           ...values,
           addresses: values.addresses.map((a) => a.value),
-        })
-        toast.success(t('clientDetailCard.success'), {
-          description: t('clientDetailCard.successDesc'),
-        })
-        setIsEditing(false)
+        });
+        toast.success(t("clientDetailCard.success"), {
+          description: t("clientDetailCard.successDesc"),
+        });
+        setIsEditing(false);
       } catch {
-        toast.error(t('clientDetailCard.error'), {
-          description: t('clientDetailCard.errorDesc'),
-        })
+        toast.error(t("clientDetailCard.error"), {
+          description: t("clientDetailCard.errorDesc"),
+        });
       }
-    })()
+    })();
   }
 
   return (
@@ -156,7 +167,12 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
         <div className="flex items-start justify-between gap-4">
           {/* Avatar + name */}
           <div className="flex items-center gap-4">
-            <ClientAvatar firstName={client.firstName} lastName={client.lastName} size="lg" shape="square" />
+            <ClientAvatar
+              firstName={client.firstName}
+              lastName={client.lastName}
+              size="lg"
+              shape="square"
+            />
 
             {isEditing ? (
               <Form {...form}>
@@ -168,7 +184,11 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                       render={({ field }) => (
                         <FormItem className="flex-1">
                           <FormControl>
-                            <Input placeholder={t('clientDetailCard.firstName')} {...field} className="h-8 text-sm" />
+                            <Input
+                              placeholder={t("clientDetailCard.firstName")}
+                              {...field}
+                              className="h-8 text-sm"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -180,7 +200,11 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                       render={({ field }) => (
                         <FormItem className="flex-1">
                           <FormControl>
-                            <Input placeholder={t('clientDetailCard.lastName')} {...field} className="h-8 text-sm" />
+                            <Input
+                              placeholder={t("clientDetailCard.lastName")}
+                              {...field}
+                              className="h-8 text-sm"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -193,7 +217,11 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <StatusSelector value={field.value} onChange={field.onChange} size="sm" />
+                          <StatusSelector
+                            value={field.value}
+                            onChange={field.onChange}
+                            size="sm"
+                          />
                         </FormControl>
                       </FormItem>
                     )}
@@ -226,7 +254,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   id="cancel-edit-btn"
                 >
                   <X className="h-4 w-4" />
-                  {t('clientDetailCard.cancel')}
+                  {t("clientDetailCard.cancel")}
                 </Button>
                 <Button
                   type="button"
@@ -239,7 +267,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   {isPending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    t('clientDetailCard.save')
+                    t("clientDetailCard.save")
                   )}
                 </Button>
               </>
@@ -253,7 +281,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   className="text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="mr-1.5 h-4 w-4" />
-                  {t('clientDetailCard.back')}
+                  {t("clientDetailCard.back")}
                 </Button>
                 <Button
                   type="button"
@@ -264,7 +292,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   id="edit-client-btn"
                 >
                   <Pencil className="h-3.5 w-3.5" />
-                  {t('clientDetailCard.edit')}
+                  {t("clientDetailCard.edit")}
                 </Button>
               </>
             )}
@@ -276,14 +304,18 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
       <div className="rounded-sm border border-border bg-white p-6 space-y-5">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-foreground">{t('clientDetailCard.contactInfo')}</h2>
+            <h2 className="text-sm font-semibold text-foreground">
+              {t("clientDetailCard.contactInfo")}
+            </h2>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {isEditing ? t('clientDetailCard.contactInfoEdit') : t('clientDetailCard.contactInfoView')}
+              {isEditing
+                ? t("clientDetailCard.contactInfoEdit")
+                : t("clientDetailCard.contactInfoView")}
             </p>
           </div>
           {isEditing && (
             <span className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-md px-2 py-1 font-medium">
-              {t('clientDetailCard.editMode')}
+              {t("clientDetailCard.editMode")}
             </span>
           )}
         </div>
@@ -298,9 +330,13 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('clientDetailCard.email')}</FormLabel>
+                      <FormLabel>{t("clientDetailCard.email")}</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="email@empresa.com" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="email@empresa.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -311,7 +347,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('clientDetailCard.phone')}</FormLabel>
+                      <FormLabel>{t("clientDetailCard.phone")}</FormLabel>
                       <FormControl>
                         <Input placeholder="+1 (809) 555-0100" {...field} />
                       </FormControl>
@@ -330,22 +366,37 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                 append={append}
                 remove={remove}
                 addButtonId="add-address-edit-btn"
-                addButtonLabel={t('clientDetailCard.add')}
+                addButtonLabel={t("clientDetailCard.add")}
               />
             </div>
           </Form>
         ) : (
           <div className="space-y-5">
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <DetailRow icon={Mail} label={t('clientDetailCard.email')} value={client.email} />
-              <DetailRow icon={Phone} label={t('clientDetailCard.phone')} value={client.phone} />
-              <DetailRow icon={Calendar} label={t('clientDetailCard.registeredAt')} value={formattedDate} />
+              <DetailRow
+                icon={Mail}
+                label={t("clientDetailCard.email")}
+                value={client.email}
+              />
+              <DetailRow
+                icon={Phone}
+                label={t("clientDetailCard.phone")}
+                value={client.phone}
+              />
+              <DetailRow
+                icon={Calendar}
+                label={t("clientDetailCard.registeredAt")}
+                value={formattedDate}
+              />
             </div>
             <Separator />
-            <AddressesRow addresses={client.addresses} label={t('clientDetailCard.addresses')} />
+            <AddressesRow
+              addresses={client.addresses}
+              label={t("clientDetailCard.addresses")}
+            />
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }

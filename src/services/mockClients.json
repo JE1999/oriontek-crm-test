@@ -18,9 +18,7 @@
     "lastName": "Rodríguez",
     "email": "carlos.r@techsolutions.do",
     "phone": "+1 (829) 555-0202",
-    "addresses": [
-      "Calle El Conde 45, Zona Colonial, Santo Domingo"
-    ],
+    "addresses": ["Calle El Conde 45, Zona Colonial, Santo Domingo"],
     "status": "active",
     "createdAt": "2025-02-03T14:30:00Z"
   },
@@ -44,9 +42,7 @@
     "lastName": "Fernández",
     "email": "luis.f@innovatech.net",
     "phone": "+1 (809) 555-0404",
-    "addresses": [
-      "Plaza Central, Av. 27 de Febrero, Santo Domingo"
-    ],
+    "addresses": ["Plaza Central, Av. 27 de Febrero, Santo Domingo"],
     "status": "active",
     "createdAt": "2025-04-10T08:45:00Z"
   },
@@ -82,9 +78,7 @@
     "lastName": "Rodríguez",
     "email": "carlos.r@techsolutions.do",
     "phone": "+1 (829) 555-0202",
-    "addresses": [
-      "Calle El Conde 45, Zona Colonial, Santo Domingo"
-    ],
+    "addresses": ["Calle El Conde 45, Zona Colonial, Santo Domingo"],
     "status": "active",
     "createdAt": "2025-02-03T14:30:00Z"
   },
@@ -108,9 +102,7 @@
     "lastName": "Fernández",
     "email": "luis.f@innovatech.net",
     "phone": "+1 (809) 555-0404",
-    "addresses": [
-      "Plaza Central, Av. 27 de Febrero, Santo Domingo"
-    ],
+    "addresses": ["Plaza Central, Av. 27 de Febrero, Santo Domingo"],
     "status": "active",
     "createdAt": "2025-04-10T08:45:00Z"
   },
@@ -146,9 +138,7 @@
     "lastName": "Rodríguez",
     "email": "carlos.r@techsolutions.do",
     "phone": "+1 (829) 555-0202",
-    "addresses": [
-      "Calle El Conde 45, Zona Colonial, Santo Domingo"
-    ],
+    "addresses": ["Calle El Conde 45, Zona Colonial, Santo Domingo"],
     "status": "active",
     "createdAt": "2025-02-03T14:30:00Z"
   },
@@ -172,9 +162,7 @@
     "lastName": "Fernández",
     "email": "luis.f@innovatech.net",
     "phone": "+1 (809) 555-0404",
-    "addresses": [
-      "Plaza Central, Av. 27 de Febrero, Santo Domingo"
-    ],
+    "addresses": ["Plaza Central, Av. 27 de Febrero, Santo Domingo"],
     "status": "active",
     "createdAt": "2025-04-10T08:45:00Z"
   },
