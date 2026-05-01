@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge'
+import { useT } from '@/hooks/useT'
 import { CLIENT_STATUS } from '@/constants'
 import type { Client } from '@/store/types/client'
 
@@ -7,6 +8,8 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status }: StatusBadgeProps) {
+  const { t } = useT()
+
   return (
     <Badge
       variant={status === CLIENT_STATUS.ACTIVE ? 'default' : 'secondary'}
@@ -21,7 +24,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
           status === CLIENT_STATUS.ACTIVE ? 'bg-emerald-500' : 'bg-slate-400'
         }`}
       />
-      {status === CLIENT_STATUS.ACTIVE ? 'Activo' : 'Inactivo'}
+      {status === CLIENT_STATUS.ACTIVE ? t('status.active') : t('status.inactive')}
     </Badge>
   )
 }

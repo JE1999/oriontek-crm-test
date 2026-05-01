@@ -1,4 +1,5 @@
 import { useFieldArray, useAppForm } from '@/hooks/useAppForm'
+import { useT } from '@/hooks/useT'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import {
@@ -17,9 +18,10 @@ import { Loader2 } from '@/lib/icons'
 import { AddressFormList } from './AddressFormList'
 import { StatusSelector } from './StatusSelector'
 import { CLIENT_STATUS, APP_ROUTES, QUERY_KEYS } from '@/constants'
-import { clientSchema, type ClientFormValues } from '@/schemas/client.schema'
+import { getClientSchema, type ClientFormValues } from '@/schemas/client.schema'
 
 export function ClientForm() {
+  const { t } = useT()
   const navigate = useNavigate()
   const queryClient = useDataClient()
   const { mutateAsync, isPending } = useDataMutation({
@@ -30,7 +32,7 @@ export function ClientForm() {
   })
 
   const form = useAppForm<ClientFormValues>({
-    schema: clientSchema,
+    schema: getClientSchema(t),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -52,13 +54,13 @@ export function ClientForm() {
         ...values,
         addresses: values.addresses.map((a) => a.value),
       })
-      toast.success('Cliente creado', {
-        description: `${values.firstName} ${values.lastName} fue registrado exitosamente.`,
+      toast.success(t('clientForm.success'), {
+        description: t('clientForm.successDesc', { name: `${values.firstName} ${values.lastName}` }),
       })
       navigate(APP_ROUTES.HOME)
     } catch {
-      toast.error('Error al crear cliente', {
-        description: 'Ocurrió un problema. Intenta de nuevo.',
+      toast.error(t('clientForm.error'), {
+        description: t('clientForm.errorDesc'),
       })
     }
   }
@@ -69,8 +71,8 @@ export function ClientForm() {
         {/* Personal info */}
         <div className="rounded-sm border border-border bg-white p-6 space-y-5">
           <div>
-            <h2 className="text-sm font-semibold text-foreground">Información personal</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Datos básicos de identificación del cliente</p>
+            <h2 className="text-sm font-semibold text-foreground">{t('clientForm.personalInfo')}</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">{t('clientForm.personalInfoDesc')}</p>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <FormField
@@ -78,7 +80,7 @@ export function ClientForm() {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre</FormLabel>
+                  <FormLabel>{t('clientForm.firstName')}</FormLabel>
                   <FormControl>
                     <Input placeholder="María" {...field} />
                   </FormControl>
@@ -91,7 +93,7 @@ export function ClientForm() {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Apellido</FormLabel>
+                  <FormLabel>{t('clientForm.lastName')}</FormLabel>
                   <FormControl>
                     <Input placeholder="García" {...field} />
                   </FormControl>
@@ -106,7 +108,7 @@ export function ClientForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('clientForm.email')}</FormLabel>
                   <FormControl>
                     <Input type="email" placeholder="maria@empresa.com" {...field} />
                   </FormControl>
@@ -119,7 +121,7 @@ export function ClientForm() {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Teléfono</FormLabel>
+                  <FormLabel>{t('clientForm.phone')}</FormLabel>
                   <FormControl>
                     <Input placeholder="+1 (809) 555-0100" {...field} />
                   </FormControl>
@@ -132,8 +134,8 @@ export function ClientForm() {
 
         <div className="rounded-sm border border-border bg-white p-6 space-y-5">
           <div>
-            <h2 className="text-sm font-semibold text-foreground">Dirección y estado</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Ubicación y estado del cliente</p>
+            <h2 className="text-sm font-semibold text-foreground">{t('clientForm.addressStatus')}</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">{t('clientForm.addressStatusDesc')}</p>
           </div>
           {/* Addresses */}
           <AddressFormList
@@ -151,7 +153,7 @@ export function ClientForm() {
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Estado</FormLabel>
+                <FormLabel>{t('clientForm.status')}</FormLabel>
                 <FormControl>
                   <StatusSelector value={field.value} onChange={field.onChange} size="md" />
                 </FormControl>
@@ -169,16 +171,16 @@ export function ClientForm() {
             onClick={() => navigate(APP_ROUTES.HOME)}
             disabled={isPending}
           >
-            Cancelar
+            {t('clientForm.cancel')}
           </Button>
           <Button type="submit" disabled={isPending} className="min-w-32">
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Guardando…
+                {t('clientForm.saving')}
               </>
             ) : (
-              'Crear cliente'
+              t('clientForm.save')
             )}
           </Button>
         </div>

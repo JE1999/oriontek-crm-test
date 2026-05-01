@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFieldArray, useAppForm } from '@/hooks/useAppForm'
+import { useT } from '@/hooks/useT'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -32,7 +33,7 @@ import { ClientAvatar } from './ClientAvatar'
 import { StatusSelector } from './StatusSelector'
 import { AddressFormList } from './AddressFormList'
 import { APP_ROUTES } from '@/constants'
-import { clientSchema, type ClientFormValues } from '@/schemas/client.schema'
+import { getClientSchema, type ClientFormValues } from '@/schemas/client.schema'
 import { formatDate } from '@/utils/format'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -58,7 +59,7 @@ function DetailRow({
   )
 }
 
-function AddressesRow({ addresses }: { addresses: string[] }) {
+function AddressesRow({ addresses, label }: { addresses: string[], label: string }) {
   return (
     <div className="flex items-start gap-3">
       <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-slate-100">
@@ -66,7 +67,7 @@ function AddressesRow({ addresses }: { addresses: string[] }) {
       </div>
       <div className="flex-1">
         <p className="text-xs text-muted-foreground font-medium">
-          Direcciones
+          {label}
           <span className="ml-1.5 inline-flex items-center justify-center rounded-full bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-500">
             {addresses.length}
           </span>
@@ -93,6 +94,7 @@ interface ClientDetailCardProps {
 }
 
 export function ClientDetailCard({ client }: ClientDetailCardProps) {
+  const { t } = useT()
   const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
   const queryClient = useDataClient()
@@ -107,7 +109,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
   const formattedDate = formatDate(client.createdAt)
 
   const form = useAppForm<ClientFormValues>({
-    schema: clientSchema,
+    schema: getClientSchema(t),
     values: {
       firstName: client.firstName,
       lastName: client.lastName,
@@ -135,13 +137,13 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
           ...values,
           addresses: values.addresses.map((a) => a.value),
         })
-        toast.success('Cliente actualizado', {
-          description: 'Los cambios fueron guardados correctamente.',
+        toast.success(t('clientDetailCard.success'), {
+          description: t('clientDetailCard.successDesc'),
         })
         setIsEditing(false)
       } catch {
-        toast.error('Error al guardar', {
-          description: 'Ocurrió un problema. Intenta de nuevo.',
+        toast.error(t('clientDetailCard.error'), {
+          description: t('clientDetailCard.errorDesc'),
         })
       }
     })()
@@ -166,7 +168,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                       render={({ field }) => (
                         <FormItem className="flex-1">
                           <FormControl>
-                            <Input placeholder="Nombre" {...field} className="h-8 text-sm" />
+                            <Input placeholder={t('clientDetailCard.firstName')} {...field} className="h-8 text-sm" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -178,7 +180,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                       render={({ field }) => (
                         <FormItem className="flex-1">
                           <FormControl>
-                            <Input placeholder="Apellido" {...field} className="h-8 text-sm" />
+                            <Input placeholder={t('clientDetailCard.lastName')} {...field} className="h-8 text-sm" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -224,7 +226,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   id="cancel-edit-btn"
                 >
                   <X className="h-4 w-4" />
-                  Cancelar
+                  {t('clientDetailCard.cancel')}
                 </Button>
                 <Button
                   type="button"
@@ -237,7 +239,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   {isPending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    'Guardar'
+                    t('clientDetailCard.save')
                   )}
                 </Button>
               </>
@@ -251,7 +253,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   className="text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="mr-1.5 h-4 w-4" />
-                  Volver
+                  {t('clientDetailCard.back')}
                 </Button>
                 <Button
                   type="button"
@@ -262,7 +264,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   id="edit-client-btn"
                 >
                   <Pencil className="h-3.5 w-3.5" />
-                  Editar
+                  {t('clientDetailCard.edit')}
                 </Button>
               </>
             )}
@@ -274,14 +276,14 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
       <div className="rounded-sm border border-border bg-white p-6 space-y-5">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-foreground">Información de contacto</h2>
+            <h2 className="text-sm font-semibold text-foreground">{t('clientDetailCard.contactInfo')}</h2>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {isEditing ? 'Modifica los datos del cliente' : 'Datos de comunicación del cliente'}
+              {isEditing ? t('clientDetailCard.contactInfoEdit') : t('clientDetailCard.contactInfoView')}
             </p>
           </div>
           {isEditing && (
             <span className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-md px-2 py-1 font-medium">
-              Modo edición
+              {t('clientDetailCard.editMode')}
             </span>
           )}
         </div>
@@ -296,7 +298,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t('clientDetailCard.email')}</FormLabel>
                       <FormControl>
                         <Input type="email" placeholder="email@empresa.com" {...field} />
                       </FormControl>
@@ -309,7 +311,7 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Teléfono</FormLabel>
+                      <FormLabel>{t('clientDetailCard.phone')}</FormLabel>
                       <FormControl>
                         <Input placeholder="+1 (809) 555-0100" {...field} />
                       </FormControl>
@@ -328,19 +330,19 @@ export function ClientDetailCard({ client }: ClientDetailCardProps) {
                 append={append}
                 remove={remove}
                 addButtonId="add-address-edit-btn"
-                addButtonLabel="Agregar"
+                addButtonLabel={t('clientDetailCard.add')}
               />
             </div>
           </Form>
         ) : (
           <div className="space-y-5">
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <DetailRow icon={Mail} label="Email" value={client.email} />
-              <DetailRow icon={Phone} label="Teléfono" value={client.phone} />
-              <DetailRow icon={Calendar} label="Registrado el" value={formattedDate} />
+              <DetailRow icon={Mail} label={t('clientDetailCard.email')} value={client.email} />
+              <DetailRow icon={Phone} label={t('clientDetailCard.phone')} value={client.phone} />
+              <DetailRow icon={Calendar} label={t('clientDetailCard.registeredAt')} value={formattedDate} />
             </div>
             <Separator />
-            <AddressesRow addresses={client.addresses} />
+            <AddressesRow addresses={client.addresses} label={t('clientDetailCard.addresses')} />
           </div>
         )}
       </div>

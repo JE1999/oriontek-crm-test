@@ -1,0 +1,111 @@
+{
+  "sidebar": {
+    "menu": "Menú",
+    "dashboard": "Dashboard",
+    "newClient": "Nuevo cliente"
+  },
+  "home": {
+    "title": "Clientes",
+    "loading": "Cargando…",
+    "clientsRegistered_one": "{{count}} cliente registrado",
+    "clientsRegistered_other": "{{count}} clientes registrados",
+    "newClient": "Nuevo cliente",
+    "searchPlaceholder": "Buscar por nombre o email…",
+    "stats": {
+      "total": "Total",
+      "active": "Activos",
+      "inactive": "Inactivos"
+    },
+    "noResults": "Sin resultados para \"{{query}}\"",
+    "tryAnother": "Intenta con otro nombre o email."
+  },
+  "clientsTable": {
+    "name": "Nombre",
+    "email": "Email",
+    "phone": "Teléfono",
+    "status": "Estado",
+    "action": "Acción",
+    "noClients": "No hay clientes registrados",
+    "createFirst": "Crea el primer cliente usando el botón de arriba.",
+    "total": "Total:",
+    "show": "Mostrar:",
+    "page": "Página",
+    "of": "de",
+    "prev": "Anterior",
+    "next": "Siguiente"
+  },
+  "createClient": {
+    "breadcrumb": {
+      "clients": "Clientes",
+      "newClient": "Nuevo cliente"
+    },
+    "title": "Nuevo cliente",
+    "subtitle": "Completa el formulario para registrar un nuevo cliente."
+  },
+  "clientDetail": {
+    "loading": "Cargando…",
+    "notFound": {
+      "title": "Cliente no encontrado",
+      "desc": "El cliente que buscas no existe o fue eliminado.",
+      "back": "Volver al listado"
+    },
+    "breadcrumb": {
+      "clients": "Clientes"
+    }
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "addressForm": {
+    "title": "Direcciones",
+    "add": "Agregar dirección",
+    "addressX": "Dirección {{count}}"
+  },
+  "clientDetailCard": {
+    "addresses": "Direcciones",
+    "success": "Cliente actualizado",
+    "successDesc": "Los cambios fueron guardados correctamente.",
+    "error": "Error al guardar",
+    "errorDesc": "Ocurrió un problema. Intenta de nuevo.",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "back": "Volver",
+    "edit": "Editar",
+    "contactInfo": "Información de contacto",
+    "contactInfoEdit": "Modifica los datos del cliente",
+    "contactInfoView": "Datos de comunicación del cliente",
+    "editMode": "Modo edición",
+    "email": "Email",
+    "phone": "Teléfono",
+    "registeredAt": "Registrado el",
+    "add": "Agregar"
+  },
+  "clientForm": {
+    "success": "Cliente creado",
+    "successDesc": "{{name}} fue registrado exitosamente.",
+    "error": "Error al crear cliente",
+    "errorDesc": "Ocurrió un problema. Intenta de nuevo.",
+    "personalInfo": "Información personal",
+    "personalInfoDesc": "Datos básicos de identificación del cliente",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Email",
+    "phone": "Teléfono",
+    "addressStatus": "Dirección y estado",
+    "addressStatusDesc": "Ubicación y estado del cliente",
+    "status": "Estado",
+    "cancel": "Cancelar",
+    "save": "Crear cliente",
+    "saving": "Guardando…"
+  },
+  "validation": {
+    "min2Chars": "Mínimo 2 caracteres",
+    "invalidEmail": "Email no válido",
+    "min10Digits": "Mínimo 10 dígitos",
+    "min5Chars": "Mínimo 5 caracteres",
+    "min1Address": "Agrega al menos una dirección"
+  }
+}

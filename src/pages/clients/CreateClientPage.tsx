@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useT } from '@/hooks/useT'
 import { ClientForm } from '@/components/clients/ClientForm'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,6 +14,7 @@ import { ArrowLeft } from '@/lib/icons'
 import { APP_ROUTES } from '@/constants'
 
 export default function CreateClientPage() {
+  const { t } = useT()
   const navigate = useNavigate()
 
   return (
@@ -25,12 +27,12 @@ export default function CreateClientPage() {
               onClick={() => navigate(APP_ROUTES.HOME)}
               className="cursor-pointer hover:text-foreground"
             >
-              Clientes
+              {t('createClient.breadcrumb.clients')}
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Nuevo cliente</BreadcrumbPage>
+            <BreadcrumbPage>{t('createClient.breadcrumb.newClient')}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -47,9 +49,9 @@ export default function CreateClientPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-semibold text-foreground tracking-tight">Nuevo cliente</h1>
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight">{t('createClient.title')}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Completa el formulario para registrar un nuevo cliente.
+            {t('createClient.subtitle')}
           </p>
         </div>
       </div>

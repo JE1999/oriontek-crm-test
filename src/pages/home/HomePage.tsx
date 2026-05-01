@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useT } from '@/hooks/useT'
 import { useDataQuery } from '@/hooks/useData'
 import { fetchClients } from '@/services/clientsService'
 import { QUERY_KEYS } from '@/constants'
@@ -12,6 +13,7 @@ import { filterClients } from '@/utils/clients'
 import { paginate } from '@/utils/pagination'
 
 export default function HomePage() {
+  const { t } = useT()
   const navigate = useNavigate()
   const { data: clients = [], isLoading } = useDataQuery({
     queryKey: QUERY_KEYS.CLIENTS,
@@ -27,14 +29,14 @@ export default function HomePage() {
       {/* Page header */}
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground tracking-tight">Clientes</h1>
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight">{t('home.title')}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            {isLoading ? 'Cargando…' : `${clients.length} clientes registrados`}
+            {isLoading ? t('home.loading') : t('home.clientsRegistered', { count: clients.length })}
           </p>
         </div>
         <Button onClick={() => navigate(APP_ROUTES.CREATE_CLIENT)} className="gap-2 self-start sm:self-auto">
           <Plus className="h-4 w-4" />
-          Nuevo cliente
+          {t('home.newClient')}
         </Button>
       </div>
 
@@ -42,7 +44,7 @@ export default function HomePage() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
-          placeholder="Buscar por nombre o email…"
+          placeholder={t('home.searchPlaceholder')}
           value={q}
           onChange={(e) => handleSearch(e.target.value)}
           className="pl-9 bg-white max-w-sm"
@@ -54,14 +56,14 @@ export default function HomePage() {
       {!isLoading && clients.length > 0 && (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           {[
-            { label: 'Total', value: clients.length, color: 'text-foreground' },
+            { label: t('home.stats.total'), value: clients.length, color: 'text-foreground' },
             {
-              label: 'Activos',
+              label: t('home.stats.active'),
               value: clients.filter((c) => c.status === 'active').length,
               color: 'text-emerald-600',
             },
             {
-              label: 'Inactivos',
+              label: t('home.stats.inactive'),
               value: clients.filter((c) => c.status === 'inactive').length,
               color: 'text-slate-400',
             },
@@ -81,8 +83,8 @@ export default function HomePage() {
       {q && filtered.length === 0 && !isLoading ? (
         <div className="rounded-sm border border-border bg-white py-20 text-center">
           <Users className="mx-auto h-10 w-10 text-slate-300" />
-          <p className="mt-3 font-medium text-slate-500">Sin resultados para "{q}"</p>
-          <p className="text-sm text-muted-foreground mt-1">Intenta con otro nombre o email.</p>
+          <p className="mt-3 font-medium text-slate-500">{t('home.noResults', { query: q })}</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('home.tryAnother')}</p>
         </div>
       ) : (
         <ClientsTable

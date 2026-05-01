@@ -1,4 +1,5 @@
 import { CLIENT_STATUS } from '@/constants'
+import { useT } from '@/hooks/useT'
 
 interface StatusSelectorProps {
   value: 'active' | 'inactive'
@@ -7,6 +8,8 @@ interface StatusSelectorProps {
 }
 
 export function StatusSelector({ value, onChange, size = 'md' }: StatusSelectorProps) {
+  const { t } = useT()
+
   return (
     <div className="flex gap-2">
       {([CLIENT_STATUS.ACTIVE, CLIENT_STATUS.INACTIVE] as const).map((s) => (
@@ -32,7 +35,7 @@ export function StatusSelector({ value, onChange, size = 'md' }: StatusSelectorP
               size === 'md' ? 'h-2 w-2' : 'h-1.5 w-1.5'
             } ${s === CLIENT_STATUS.ACTIVE ? 'bg-emerald-500' : 'bg-slate-400'}`}
           />
-          {s === CLIENT_STATUS.ACTIVE ? 'Activo' : 'Inactivo'}
+          {s === CLIENT_STATUS.ACTIVE ? t('status.active') : t('status.inactive')}
         </label>
       ))}
     </div>

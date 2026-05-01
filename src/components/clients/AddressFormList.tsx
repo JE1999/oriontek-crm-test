@@ -2,6 +2,7 @@ import { FormField, FormItem, FormControl, FormMessage } from '@/components/ui/f
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Plus, Trash2 } from '@/lib/icons'
+import { useT } from '@/hooks/useT'
 import type { Control } from 'react-hook-form'
 
 interface AddressFormListProps {
@@ -25,11 +26,13 @@ export function AddressFormList({
   addButtonLabel = 'Agregar dirección',
   subtitle
 }: AddressFormListProps) {
+  const { t } = useT()
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-foreground">Direcciones</p>
+          <p className="text-sm font-medium text-foreground">{t('addressForm.title')}</p>
           {subtitle && (
             <p className="text-xs text-muted-foreground mt-0.5">
               {subtitle}
@@ -45,7 +48,7 @@ export function AddressFormList({
           id={addButtonId}
         >
           <Plus className="h-3.5 w-3.5" />
-          {addButtonLabel}
+          {addButtonLabel === 'Agregar dirección' ? t('addressForm.add') : addButtonLabel}
         </Button>
       </div>
 
@@ -63,7 +66,7 @@ export function AddressFormList({
                       {index + 1}
                     </div>
                     <Input
-                      placeholder={`Dirección ${index + 1}`}
+                      placeholder={t('addressForm.addressX', { count: index + 1 })}
                       {...field}
                       id={`address-input-${index}`}
                     />

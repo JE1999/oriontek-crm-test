@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
+import { useT } from '@/hooks/useT'
 import { useDataQuery } from '@/hooks/useData'
 import { fetchClientById } from '@/services/clientsService'
 import { QUERY_KEYS } from '@/constants'
@@ -16,6 +17,7 @@ import { Button } from '@/components/ui/button'
 import { APP_ROUTES } from '@/constants'
 
 export default function ClientDetailPage() {
+  const { t } = useT()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data: client, isLoading, isError } = useDataQuery({
@@ -39,13 +41,13 @@ export default function ClientDetailPage() {
           <AlertCircle className="h-7 w-7 text-red-500" />
         </div>
         <div>
-          <p className="font-semibold text-foreground">Cliente no encontrado</p>
+          <p className="font-semibold text-foreground">{t('clientDetail.notFound.title')}</p>
           <p className="text-sm text-muted-foreground mt-1">
-            El cliente que buscas no existe o fue eliminado.
+            {t('clientDetail.notFound.desc')}
           </p>
         </div>
         <Button variant="outline" onClick={() => navigate(APP_ROUTES.HOME)}>
-          Volver al listado
+          {t('clientDetail.notFound.back')}
         </Button>
       </div>
     )
@@ -61,7 +63,7 @@ export default function ClientDetailPage() {
               onClick={() => navigate(APP_ROUTES.HOME)}
               className="cursor-pointer hover:text-foreground"
             >
-              Clientes
+              {t('clientDetail.breadcrumb.clients')}
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

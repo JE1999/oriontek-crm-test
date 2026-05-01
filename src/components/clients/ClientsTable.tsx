@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useT } from '@/hooks/useT'
 import {
   Table,
   TableBody,
@@ -36,6 +37,7 @@ export function ClientsTable({
   pageSize,
   onPageSizeChange,
 }: ClientsTableProps) {
+  const { t } = useT()
   const navigate = useNavigate()
 
   return (
@@ -43,11 +45,11 @@ export function ClientsTable({
       <Table>
         <TableHeader>
           <TableRow className="bg-slate-50/80 hover:bg-slate-50/80">
-            <TableHead className="font-semibold text-slate-700 pl-5">Nombre</TableHead>
-            <TableHead className="font-semibold text-slate-700">Email</TableHead>
-            <TableHead className="font-semibold text-slate-700">Teléfono</TableHead>
-            <TableHead className="font-semibold text-slate-700">Estado</TableHead>
-            <TableHead className="font-semibold text-slate-700 pr-5 text-right">Acción</TableHead>
+            <TableHead className="font-semibold text-slate-700 pl-5">{t('clientsTable.name')}</TableHead>
+            <TableHead className="font-semibold text-slate-700">{t('clientsTable.email')}</TableHead>
+            <TableHead className="font-semibold text-slate-700">{t('clientsTable.phone')}</TableHead>
+            <TableHead className="font-semibold text-slate-700">{t('clientsTable.status')}</TableHead>
+            <TableHead className="font-semibold text-slate-700 pr-5 text-right">{t('clientsTable.action')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -58,8 +60,8 @@ export function ClientsTable({
               <TableCell colSpan={5} className="py-20 text-center">
                 <div className="flex flex-col items-center gap-3 text-muted-foreground">
                   <Users className="h-10 w-10 text-slate-300" />
-                  <p className="font-medium text-slate-500">No hay clientes registrados</p>
-                  <p className="text-sm">Crea el primer cliente usando el botón de arriba.</p>
+                  <p className="font-medium text-slate-500">{t('clientsTable.noClients')}</p>
+                  <p className="text-sm">{t('clientsTable.createFirst')}</p>
                 </div>
               </TableCell>
             </TableRow>
@@ -99,11 +101,11 @@ export function ClientsTable({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-3 border-t border-border bg-slate-50/50">
           <div className="flex items-center gap-3 text-sm text-muted-foreground w-full sm:w-auto justify-between sm:justify-start">
             <p>
-              Total: <span className="font-medium text-foreground">{totalItems}</span>
+              {t('clientsTable.total')} <span className="font-medium text-foreground">{totalItems}</span>
             </p>
             <div className="h-4 w-px bg-border hidden sm:block" />
             <div className="flex items-center gap-2">
-              <span>Mostrar:</span>
+              <span>{t('clientsTable.show')}</span>
               <select
                 className="rounded-md border border-input bg-white px-2 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 value={pageSize}
@@ -120,7 +122,7 @@ export function ClientsTable({
 
           <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
             <p className="text-sm text-muted-foreground">
-              Página <span className="font-medium text-foreground">{currentPage}</span> de <span className="font-medium text-foreground">{totalPages}</span>
+              {t('clientsTable.page')} <span className="font-medium text-foreground">{currentPage}</span> {t('clientsTable.of')} <span className="font-medium text-foreground">{totalPages}</span>
             </p>
             <div className="flex items-center gap-2">
               <Button
@@ -129,7 +131,7 @@ export function ClientsTable({
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage <= 1 || isLoading}
               >
-                Anterior
+                {t('clientsTable.prev')}
               </Button>
               <Button
                 variant="outline"
@@ -137,7 +139,7 @@ export function ClientsTable({
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage >= totalPages || isLoading}
               >
-                Siguiente
+                {t('clientsTable.next')}
               </Button>
             </div>
           </div>

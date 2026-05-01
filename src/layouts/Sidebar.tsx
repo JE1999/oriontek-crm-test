@@ -1,13 +1,16 @@
 import { NavLink } from 'react-router-dom'
+import { useT } from '@/hooks/useT'
 import { Users, LayoutDashboard, Building2 } from '@/lib/icons'
 import { cn } from '@/utils/cn'
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/clients', label: 'Nuevo cliente', icon: Users, end: false },
+  { to: '/', labelKey: 'sidebar.dashboard', icon: LayoutDashboard, end: true },
+  { to: '/clients', labelKey: 'sidebar.newClient', icon: Users, end: false },
 ]
 
 export function Sidebar() {
+  const { t } = useT()
+
   return (
     <aside className="fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-border bg-white">
       {/* Logo */}
@@ -24,10 +27,10 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
         <p className="mb-2 px-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Menú
+          {t('sidebar.menu')}
         </p>
         <ul className="space-y-0.5">
-          {navItems.map(({ to, label, icon: Icon, end }) => (
+          {navItems.map(({ to, labelKey, icon: Icon, end }) => (
             <li key={to}>
               <NavLink
                 to={to}
@@ -42,7 +45,7 @@ export function Sidebar() {
                 }
               >
                 <Icon className="h-4 w-4 flex-shrink-0" />
-                {label}
+                {t(labelKey)}
               </NavLink>
             </li>
           ))}
