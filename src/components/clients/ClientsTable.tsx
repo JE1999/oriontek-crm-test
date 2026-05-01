@@ -12,7 +12,7 @@ import { TableSkeletonRow } from "@/components/ui/table-skeleton";
 import { APP_ROUTES, PAGE_SIZE_OPTIONS } from "@/constants";
 import { useT } from "@/hooks/useT";
 import { ChevronRight, Users } from "@/lib/icons";
-import type { Client } from "@/store/types/client";
+import type { Client } from "@/types/client";
 import { ClientAvatar } from "./ClientAvatar";
 import { StatusBadge } from "./StatusBadge";
 

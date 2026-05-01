@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { CLIENT_STATUS } from "@/constants";
 import { useT } from "@/hooks/useT";
-import type { Client } from "@/store/types/client";
+import type { Client } from "@/types/client";
 
 interface StatusBadgeProps {
   status: Client["status"];

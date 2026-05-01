@@ -19,6 +19,7 @@ interface AddressFormListProps {
   addButtonId?: string;
   addButtonLabel?: string;
   subtitle?: string;
+  disabled?: boolean;
 }
 
 export function AddressFormList({
@@ -30,6 +31,7 @@ export function AddressFormList({
   addButtonId = "add-address-btn",
   addButtonLabel = "Agregar dirección",
   subtitle,
+  disabled,
 }: AddressFormListProps) {
   const { t } = useT();
 
@@ -51,6 +53,7 @@ export function AddressFormList({
           className="gap-1.5 h-8 text-xs"
           onClick={() => append({ value: "" })}
           id={addButtonId}
+          disabled={disabled}
         >
           <Plus className="h-3.5 w-3.5" />
           {addButtonLabel === "Agregar dirección"

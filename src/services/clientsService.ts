@@ -1,4 +1,4 @@
-import type { Client, CreateClientPayload } from "@/store/types/client";
+import type { Client, CreateClientPayload } from "@/types/client";
 
 export type UpdateClientPayload = Partial<CreateClientPayload>;
 

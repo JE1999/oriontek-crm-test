@@ -1,4 +1,4 @@
-import type { Client } from "@/store/types/client";
+import type { Client } from "@/types/client";
 
 /**
  * Filters a list of clients by a search query.
