@@ -7,6 +7,7 @@
 export {
   // Status & feedback
   AlertCircle,
+  RefreshCw,
   // Navigation & actions
   ArrowLeft,
   // Content

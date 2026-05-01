@@ -107,5 +107,10 @@
     "min10Digits": "Mínimo 10 dígitos",
     "min5Chars": "Mínimo 5 caracteres",
     "min1Address": "Agrega al menos una dirección"
+  },
+  "error": {
+    "title": "Algo salió mal",
+    "description": "Ha ocurrido un error inesperado en la aplicación.",
+    "retry": "Intentar de nuevo"
   }
 }

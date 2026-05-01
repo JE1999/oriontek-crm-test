@@ -1,11 +1,15 @@
+import { ErrorBoundary } from "react-error-boundary";
 import { RouterProvider } from "react-router-dom";
+import { ErrorFallback } from "@/components/error-fallback";
 import { router } from "@/routes";
 import { Providers } from "@/store/providers";
 
 export default function App() {
   return (
-    <Providers>
-      <RouterProvider router={router} />
-    </Providers>
+    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload()}>
+      <Providers>
+        <RouterProvider router={router} />
+      </Providers>
+    </ErrorBoundary>
   );
 }
