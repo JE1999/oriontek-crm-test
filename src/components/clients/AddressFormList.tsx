@@ -1,4 +1,4 @@
-import type { Control } from "react-hook-form";
+import type { Control, FieldValues } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -10,9 +10,9 @@ import { Input } from "@/components/ui/input";
 import { useT } from "@/hooks/useT";
 import { Plus, Trash2 } from "@/lib/icons";
 
-interface AddressFormListProps {
-  control: Control<any>;
-  name?: string;
+interface AddressFormListProps<TFieldValues extends FieldValues = FieldValues> {
+  control: Control<TFieldValues>;
+  name?: any;
   fields: Record<"id", string>[];
   append: (value: any) => void;
   remove: (index: number) => void;
@@ -22,7 +22,7 @@ interface AddressFormListProps {
   disabled?: boolean;
 }
 
-export function AddressFormList({
+export function AddressFormList<TFieldValues extends FieldValues = FieldValues>({
   control,
   name = "addresses",
   fields,
@@ -32,7 +32,7 @@ export function AddressFormList({
   addButtonLabel = "Agregar dirección",
   subtitle,
   disabled,
-}: AddressFormListProps) {
+}: AddressFormListProps<TFieldValues>) {
   const { t } = useT();
 
   return (
@@ -67,7 +67,7 @@ export function AddressFormList({
           <FormField
             key={fieldItem.id}
             control={control}
-            name={`${name}.${index}.value`}
+            name={`${name}.${index}.value` as any}
             render={({ field }) => (
               <FormItem>
                 <FormControl>

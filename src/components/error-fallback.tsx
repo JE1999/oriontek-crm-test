@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle, RefreshCw } from "@/lib/icons";
 import { useT } from "@/hooks/useT";
 
-export function ErrorFallback({ error, resetErrorBoundary }: { error: Error, resetErrorBoundary: () => void }) {
+export function ErrorFallback({ error, resetErrorBoundary }: { error: any, resetErrorBoundary: () => void }) {
   const { t } = useT();
 
   return (
