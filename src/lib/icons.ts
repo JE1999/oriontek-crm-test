@@ -18,6 +18,7 @@ export {
   Loader2,
   Mail,
   MapPin,
+  Menu,
   Pencil,
   Phone,
   Plus,

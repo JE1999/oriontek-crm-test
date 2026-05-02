@@ -41,8 +41,8 @@ export function ClientDetailHeader({
   const navigate = useNavigate();
 
   return (
-    <div className="rounded-sm border border-border bg-white p-6">
-      <div className="flex items-start justify-between gap-4">
+    <div className="rounded-sm border border-border bg-white p-4 sm:p-6">
+      <div className="flex flex-col-reverse gap-6">
         {/* Avatar + name */}
         <div className="flex items-center gap-4">
           <ClientAvatar
@@ -54,8 +54,8 @@ export function ClientDetailHeader({
 
           {isEditing ? (
             <Form {...form}>
-              <div className="space-y-2">
-                <div className="flex gap-2">
+              <div className="space-y-2 flex-1">
+                <div className="flex flex-col gap-2 min-[400px]:flex-row min-[400px]:gap-2">
                   <FormField
                     control={form.control}
                     name="firstName"
@@ -119,7 +119,7 @@ export function ClientDetailHeader({
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-3 flex-shrink-0 sm:mt-0">
           {isEditing ? (
             <>
               <Button
@@ -128,7 +128,7 @@ export function ClientDetailHeader({
                 size="sm"
                 onClick={onCancel}
                 disabled={isPending}
-                className="gap-1.5 text-muted-foreground"
+                className="flex-1 h-10 gap-1.5 text-muted-foreground sm:flex-none sm:h-9"
                 id="cancel-edit-btn"
               >
                 <X className="h-4 w-4" />
@@ -138,7 +138,7 @@ export function ClientDetailHeader({
                 type="button"
                 size="sm"
                 disabled={isPending}
-                className="gap-1.5 min-w-24"
+                className="flex-1 h-10 gap-1.5 min-w-24 sm:flex-none sm:h-9"
                 id="save-client-btn"
                 onClick={onSave}
               >
@@ -156,7 +156,7 @@ export function ClientDetailHeader({
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate(APP_ROUTES.HOME)}
-                className="text-muted-foreground hover:text-foreground"
+                className="flex-1 h-10 text-muted-foreground hover:text-foreground sm:flex-none sm:h-9"
               >
                 <ArrowLeft className="mr-1.5 h-4 w-4" />
                 {t("clientDetailCard.back")}
@@ -166,7 +166,7 @@ export function ClientDetailHeader({
                 variant="outline"
                 size="sm"
                 onClick={onEdit}
-                className="gap-1.5"
+                className="flex-1 h-10 gap-1.5 sm:flex-none sm:h-9"
                 id="edit-client-btn"
               >
                 <Pencil className="h-3.5 w-3.5" />

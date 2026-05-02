@@ -36,10 +36,10 @@ export function AddressFormList({
   const { t } = useT();
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-foreground">
+          <p className="text-sm font-semibold text-foreground">
             {t("addressForm.title")}
           </p>
           {subtitle && (
@@ -50,12 +50,12 @@ export function AddressFormList({
           type="button"
           variant="outline"
           size="sm"
-          className="gap-1.5 h-8 text-xs"
+          className="gap-1.5 h-9 text-xs w-full sm:w-auto"
           onClick={() => append({ value: "" })}
           id={addButtonId}
           disabled={disabled}
         >
-          <Plus className="h-3.5 w-3.5" />
+          <Plus className="h-4 w-4" />
           {addButtonLabel === "Agregar dirección"
             ? t("addressForm.add")
             : addButtonLabel}
@@ -71,29 +71,32 @@ export function AddressFormList({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-medium text-slate-500">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-[10px] font-bold text-slate-500 border border-slate-200">
                       {index + 1}
                     </div>
-                    <Input
-                      placeholder={t("addressForm.addressX", {
-                        count: index + 1,
-                      })}
-                      {...field}
-                      id={`address-input-${index}`}
-                    />
-                    {fields.length > 1 && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="h-9 w-9 p-0 text-muted-foreground hover:text-destructive hover:bg-red-50 flex-shrink-0"
-                        onClick={() => remove(index)}
-                        id={`remove-address-${index}`}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    )}
+                    <div className="flex-1 flex items-center gap-2">
+                      <Input
+                        placeholder={t("addressForm.addressX", {
+                          count: index + 1,
+                        })}
+                        {...field}
+                        className="bg-white"
+                        id={`address-input-${index}`}
+                      />
+                      {fields.length > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="h-9 w-9 p-0 text-muted-foreground hover:text-destructive hover:bg-red-50 flex-shrink-0"
+                          onClick={() => remove(index)}
+                          id={`remove-address-${index}`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </FormControl>
                 <FormMessage />

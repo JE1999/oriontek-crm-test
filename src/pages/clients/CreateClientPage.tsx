@@ -45,23 +45,23 @@ export default function CreateClientPage() {
           variant="ghost"
           size="sm"
           onClick={() => navigate(APP_ROUTES.HOME)}
-          className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+          className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground border border-transparent hover:border-border sm:h-8 sm:w-8"
           id="back-button"
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-semibold text-foreground tracking-tight">
+          <h1 className="text-xl font-bold text-foreground tracking-tight sm:text-2xl">
             {t("createClient.title")}
           </h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5 sm:text-sm">
             {t("createClient.subtitle")}
           </p>
         </div>
       </div>
 
       {/* Form */}
-      <div className="max-w-2xl">
+      <div className="w-full">
         <ClientForm />
       </div>
     </div>
