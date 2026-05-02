@@ -1,74 +1,76 @@
-# React + TypeScript + Vite
+# OrionTek CRM - Prueba Técnica
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una solución informática desarrollada para la prueba técnica de **OrionTek**.
 
-Currently, two official plugins are available:
+## Descripción del Problema
+Se desea tener el control de todos los clientes pertenecientes a la empresa OrionTek donde cada cliente puede tener N cantidad de direcciones. Con sus conocimientos de desarrollo se solicita crear una solución informática para este problema.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologías Utilizadas
 
-## React Compiler
+El proyecto utiliza un stack moderno enfocado en el rendimiento y la experiencia del desarrollador:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Core:** [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **Estilos:** [Tailwind CSS](https://tailwindcss.com/)
+- **Estado y Fetching:** [TanStack Query v5](https://tanstack.com/query/latest) (React Query)
+- **Formularios:** [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) (Validación)
+- **Routing:** [React Router 7](https://reactrouter.com/)
+- **Internacionalización:** [i18next](https://www.i18next.com/)
+- **UI Components:** Radix UI + Lucide React + Sonner (Notificaciones)
+- **Calidad de Código:** [Biome](https://biomejs.dev/) (Linting y Formateo)
+- **Testing:** [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
-## Expanding the ESLint configuration
+### Sobre Biome
+Para este proyecto se ha integrado **Biome** como herramienta unificada de linting y formateo. Biome es una alternativa extremadamente rápida a ESLint y Prettier que permite mantener un estándar de código consistente con una configuración simplificada y un rendimiento superior.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Estructura de Carpetas
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+├── __tests__/      # Pruebas unitarias y de integración
+├── components/     # Componentes de UI reutilizables
+├── constants/      # Constantes globales del proyecto
+├── hooks/          # Hooks personalizados
+├── layouts/        # Componentes de diseño (Sidebar, Navbar, etc.)
+├── lib/            # Configuraciones de librerías externas (API clients)
+├── locales/        # Archivos de traducción (i18n)
+├── pages/          # Páginas principales de la aplicación
+├── providers/      # Proveedores de contexto (QueryClient, Theme, etc.)
+├── routes/         # Configuración de rutas
+├── schemas/        # Esquemas de validación de Zod
+├── services/       # Capa de servicios para peticiones API
+├── types/          # Definiciones de tipos TypeScript
+└── utils/          # Funciones de utilidad general
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Configuración y Ejecución
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Sigue estos pasos para levantar el proyecto localmente:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clonar el repositorio
+```bash
+git clone <url-del-repositorio>
+cd oriontek-crm-test
 ```
-# oriontek-crm-test
+
+### 2. Instalar dependencias
+```bash
+npm install
+```
+
+### 3. Levantar el servidor de desarrollo
+```bash
+npm run dev
+```
+La aplicación estará disponible en `http://localhost:5173`.
+
+## Scripts Disponibles
+
+- `npm run dev`: Inicia el servidor de desarrollo.
+- `npm run build`: Genera el build de producción.
+- `npm run lint`: Ejecuta el linter de Biome.
+- `npm run format`: Formatea el código usando Biome.
+- `npm run check`: Ejecuta linting y formateo simultáneamente con Biome.
+- `npm run test`: Ejecuta las pruebas unitarias con Vitest.
+- `npm run test:ui`: Inicia la interfaz visual de Vitest.
+
