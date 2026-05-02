@@ -49,7 +49,7 @@ Sigue estos pasos para levantar el proyecto localmente:
 
 ### 1. Clonar el repositorio
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/JE1999/oriontek-crm-test
 cd oriontek-crm-test
 ```
 
